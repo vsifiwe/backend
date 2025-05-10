@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, BadRequestException, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -62,6 +62,9 @@ export class AuthService {
   }
 
   async getProfile(id: number) {
-    return this.usersService.findById(id);
+    const user = await this.usersService.findById(id);
+    if (!user) throw new NotFoundException('User not found');
+    delete user.password;
+    return user;
   }
 }
