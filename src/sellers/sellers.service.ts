@@ -1,7 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { Store } from './entities/store.entity';
-import { StoreRepository } from './repositories/store.repository';
-
+import { StoreRepository } from './store.repository';
 type StoreInput = Omit<Store, 'id' | 'createdAt' | 'updatedAt' | 'user'>;
 
 @Injectable()
@@ -21,8 +20,8 @@ export class SellersService {
         return createdStore;
     }
 
-    async getStore(id: number) {
-        return this.storeRepository.findById(id);
+    async getStore(userId: number) {
+        return this.storeRepository.findStoreByUserId(userId);
     }
     
 }

@@ -3,7 +3,9 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateStoreDto } from './dto/createStore.dto';
+import { CreateProductDto } from './dto/createProduct.dto';
 import { SellersService } from './sellers.service';
+import { ProductsService } from 'src/products/products.service';
 
 
 @UseGuards(JwtAuthGuard)
@@ -11,7 +13,7 @@ import { SellersService } from './sellers.service';
 export class SellersController {
   constructor(
     private readonly sellersService: SellersService,
-    // private readonly productsService: ProductsService,
+    private readonly productsService: ProductsService,
     // private readonly ordersService: OrdersService,
   ) { }
 
@@ -30,7 +32,7 @@ export class SellersController {
 
   @Get('store')
   getStore(@Req() req) {
-    // return this.sellersService.getStore(req.user.userId);
+    return this.sellersService.getStore(req.user.id);
   }
 
   @Patch('store')
@@ -44,8 +46,14 @@ export class SellersController {
   }
 
   @Post('products')
-  createProduct(@Req() req, @Body() dto: any) {
-    // return this.productsService.createProduct(req.user.userId, dto);
+  createProduct(@Req() req, @Body() dto: CreateProductDto) {
+    const product = {
+      ...dto,
+      storeId: req.user.storeId,
+      reviewCount: 0,
+      category: null,
+    }
+    return this.productsService.createProduct(product);
   }
 
   @Patch('products/:id')
