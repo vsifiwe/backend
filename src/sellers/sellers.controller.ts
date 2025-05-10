@@ -4,6 +4,7 @@ import {
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateStoreDto } from './dto/createStore.dto';
 import { CreateProductDto } from './dto/createProduct.dto';
+import { CreateCategoryDto } from './dto/createCategory.dto';
 import { SellersService } from './sellers.service';
 import { ProductsService } from 'src/products/products.service';
 
@@ -14,7 +15,6 @@ export class SellersController {
   constructor(
     private readonly sellersService: SellersService,
     private readonly productsService: ProductsService,
-    // private readonly ordersService: OrdersService,
   ) { }
 
   // Store Management
@@ -46,12 +46,13 @@ export class SellersController {
   }
 
   @Post('products')
-  createProduct(@Req() req, @Body() dto: CreateProductDto) {
+  async createProduct(@Req() req, @Body() dto: CreateProductDto) {
+    const store = await this.sellersService.getStoreByUserId(req.user.id);
+    const category = await this.productsService.getCategoryById(dto.categoryId);
     const product = {
       ...dto,
-      storeId: req.user.storeId,
-      reviewCount: 0,
-      category: null,
+      store: store,
+      category: category,
     }
     return this.productsService.createProduct(product);
   }
@@ -74,5 +75,15 @@ export class SellersController {
   @Patch('orders/:id/status')
   updateOrderStatus(@Req() req, @Param('id') id: string, @Body('status') status: string) {
     // return this.ordersService.updateOrderStatus(req.user.userId, id, status);
+  }
+
+  @Post('categories')
+  createCategory(@Req() req, @Body() dto: CreateCategoryDto) {
+    return this.productsService.createCategory(dto);
+  }
+
+  @Get('categories')
+  listCategories(@Req() req) {
+    return this.productsService.getCategories();
   }
 }

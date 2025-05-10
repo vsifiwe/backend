@@ -9,7 +9,6 @@ export class SellersService {
         private readonly storeRepository: StoreRepository,
     ) { }
 
-
     async createStore(store: StoreInput) {
         
         const existingStore = await this.storeRepository.findStoreByUserId(store.userId);
@@ -21,6 +20,10 @@ export class SellersService {
     }
 
     async getStore(userId: number) {
+        return this.storeRepository.findStoreByUserId(userId);
+    }
+
+    async getStoreByUserId(userId: number) {
         return this.storeRepository.findStoreByUserId(userId);
     }
     
