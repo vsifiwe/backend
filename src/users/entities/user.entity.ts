@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn } from 'typeorm';
+import { Store } from 'src/sellers/entities/store.entity';
+import { Entity, Column, PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, OneToOne } from 'typeorm';
 
 @Entity('users')
 export class User {
