@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -38,5 +38,9 @@ export class UsersRepository {
 
   async findAll(): Promise<User[]> {
     return this.repository.find();
+  }
+
+  async findAllWhere(options: FindOptionsWhere<User>): Promise<User[]> {
+    return this.repository.find({ where: options });
   }
 }

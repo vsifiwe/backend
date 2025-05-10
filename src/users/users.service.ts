@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { UsersRepository } from './users.repository';
+import { FindOptionsWhere } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -21,5 +22,9 @@ export class UsersService {
 
   async findById(id: number) {
     return this.usersRepository.findById(id);
+  }
+
+  async findAllWhere(options: FindOptionsWhere<User>) {
+    return this.usersRepository.findAllWhere(options);
   }
 }
