@@ -4,16 +4,16 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json yarn.lock ./
 
 # Install dependencies
-RUN npm ci
+RUN yarn install
 
 # Copy source code
 COPY . .
 
 # Build the application
-RUN npm run build
+RUN yarn build
 
 # Production stage
 FROM node:20-alpine
@@ -21,10 +21,10 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json yarn.lock ./
 
-# Install production dependencies only
-RUN npm ci --only=production
+# Install dependencies
+RUN yarn install --production
 
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
@@ -33,4 +33,4 @@ COPY --from=builder /app/dist ./dist
 EXPOSE 3000
 
 # Command to run the application
-CMD ["npm", "run", "start:prod"]
+CMD ["yarn", "start:prod"]
