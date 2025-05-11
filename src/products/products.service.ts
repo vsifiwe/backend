@@ -19,7 +19,7 @@ export class ProductsService {
         return this.productRepository.create(product);
     }
 
-    async getProducts(storeId: number): Promise<Product[]> {
+    async listProductsByStoreId(storeId: number): Promise<Product[]> {
         return this.productRepository.findProductByStoreId(storeId);
     }
 
@@ -27,13 +27,20 @@ export class ProductsService {
         return this.categoryRepository.create(category);
     }
 
-    async getCategories(): Promise<Category[]> {
-        return this.categoryRepository.findAll();
+    async listCategoriesByStoreId(storeId: number): Promise<Category[]> {
+        return this.categoryRepository.findCategoryByStoreId(storeId);
     }
 
     async getCategoryById(id: number): Promise<Category> {
         return this.categoryRepository.findById(id);
     }
-    
+
+    async getProductById(id: number): Promise<Product> {
+        return this.productRepository.findById(id);
+    }
+
+    async getAllProducts(): Promise<Product[]> {
+        return this.productRepository.findAll();
+    }
     
 }

@@ -31,4 +31,8 @@ export class CategoryRepository {
   async findAll(): Promise<Category[]> {
     return this.repository.find();
   }
+
+  async findCategoryByStoreId(storeId: number): Promise<Category[]> {
+    return this.repository.find({ where: { store: { id: storeId } } });
+  }
 }

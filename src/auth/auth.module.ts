@@ -8,11 +8,13 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 // import { MailerModule } from '@nestjs-modules/mailer';
 import { RolesGuard } from './guards/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
     ConfigModule,
     UsersModule,
+    PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (cs: ConfigService) => ({
@@ -25,7 +27,7 @@ import { APP_GUARD } from '@nestjs/core';
   providers: [
     AuthService,
     JwtStrategy,
-    { provide: APP_GUARD, useClass: RolesGuard },
+    // { provide: APP_GUARD, useClass: RolesGuard },
   ],
   controllers: [AuthController],
 })

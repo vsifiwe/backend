@@ -9,6 +9,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { AdminModule } from './admin/admin.module';
 import { SellersModule } from './sellers/sellers.module';
 import { ProductsModule } from './products/products.module';
+import { OrdersModule } from './orders/orders.module';
+import { ShoppersModule } from './shoppers/shoppers.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { ProductsModule } from './products/products.module';
     AdminModule,
     SellersModule,
     ProductsModule,
+    OrdersModule,
+    ShoppersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

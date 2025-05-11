@@ -7,14 +7,19 @@ import { CreateProductDto } from './dto/createProduct.dto';
 import { CreateCategoryDto } from './dto/createCategory.dto';
 import { SellersService } from './sellers.service';
 import { ProductsService } from 'src/products/products.service';
+import { OrdersService } from 'src/orders/orders.service';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles('seller')
 @Controller('sellers')
 export class SellersController {
   constructor(
     private readonly sellersService: SellersService,
     private readonly productsService: ProductsService,
+    private readonly ordersService: OrdersService,
   ) { }
 
   // Store Management
@@ -26,6 +31,7 @@ export class SellersController {
       userId: req.user.id,
       reviewCount: 0,
       products: [],
+      categories: [],
     }
     return this.sellersService.createStore(store);
   }
@@ -41,8 +47,9 @@ export class SellersController {
   }
 
   @Get('products')
-  listProducts(@Req() req) {
-    // return this.productsService.listSellerProducts(req.user.userId);
+  async listProducts(@Req() req) {
+    const store = await this.sellersService.getStoreByUserId(req.user.id);
+    return this.productsService.listProductsByStoreId(store.id);
   }
 
   @Post('products')
@@ -68,8 +75,10 @@ export class SellersController {
   }
 
   @Get('orders')
-  listOrders(@Req() req) {
-    // return this.ordersService.listStoreOrders(req.user.userId);
+  // @Roles('seller')
+  async listOrders(@Req() req) {
+    const store = await this.sellersService.getStoreByUserId(req.user.id);
+    return this.ordersService.getOrdersByStoreId(store.id);
   }
 
   @Patch('orders/:id/status')
@@ -78,12 +87,17 @@ export class SellersController {
   }
 
   @Post('categories')
-  createCategory(@Req() req, @Body() dto: CreateCategoryDto) {
-    return this.productsService.createCategory(dto);
+  async createCategory(@Req() req, @Body() dto: CreateCategoryDto) {
+    const store = await this.sellersService.getStoreByUserId(req.user.id);
+    return this.productsService.createCategory({
+      ...dto,
+      store: store,
+    });
   }
 
   @Get('categories')
-  listCategories(@Req() req) {
-    return this.productsService.getCategories();
+  async listCategories(@Req() req) {
+    const store = await this.sellersService.getStoreByUserId(req.user.id);
+    return this.productsService.listCategoriesByStoreId(store.id);
   }
 }
