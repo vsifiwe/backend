@@ -1,12 +1,14 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { Store } from './entities/store.entity';
 import { StoreRepository } from './store.repository';
+import { UsersService } from 'src/users/users.service';
 type StoreInput = Omit<Store, 'id' | 'createdAt' | 'updatedAt' | 'user'>;
 
 @Injectable()
 export class SellersService {
     constructor(
         private readonly storeRepository: StoreRepository,
+        private readonly usersService: UsersService,
     ) { }
 
     async createStore(store: StoreInput) {
@@ -25,6 +27,13 @@ export class SellersService {
 
     async getStoreByUserId(userId: number) {
         return this.storeRepository.findStoreByUserId(userId);
+    }
+
+    async applyForSeller(userId: number) {
+        const user = await this.usersService.findById(userId);
+        if (!user) throw new NotFoundException('User not found');
+        await this.usersService.changeRole(userId, 'seller');
+        return { message: 'Seller application submitted' };
     }
     
 }

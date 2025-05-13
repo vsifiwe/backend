@@ -1,5 +1,6 @@
 import {
-  Controller, Get, Post, Patch, Delete, Body, Param, Req, UseGuards
+  Controller, Get, Post, Patch, Delete, Body, Param, Req, UseGuards, NotFoundException,
+  BadRequestException
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateStoreDto } from './dto/createStore.dto';

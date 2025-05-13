@@ -63,7 +63,7 @@ export class AuthService {
     return { access_token: this.jwtService.sign(payload) };
   }
 
-  async getProfile(id: number) {
+  async getProfile(id: number): Promise<User> {
     const user = await this.usersService.findById(id);
     if (!user) throw new NotFoundException('User not found');
     delete user.password;

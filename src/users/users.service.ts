@@ -27,4 +27,11 @@ export class UsersService {
   async findAllWhere(options: FindOptionsWhere<User>) {
     return this.usersRepository.findAllWhere(options);
   }
+
+  async changeRole(id: number, role: string) {
+    const user = await this.usersRepository.findById(id);
+    if (!user) throw new NotFoundException('User not found');
+    user.role = role;
+    return this.usersRepository.update(id, user);
+  }
 }
