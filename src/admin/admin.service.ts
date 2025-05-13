@@ -1,13 +1,16 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
 import { UsersService } from "src/users/users.service";
+import { ProductsService } from "src/products/products.service";
+import { StoreRepository } from "src/sellers/store.repository";
 
 
 @Injectable()
 export class AdminService {
     constructor(
         private readonly usersService: UsersService, 
-        private readonly jwtService: JwtService) { }
+        private readonly productsService: ProductsService,
+        private readonly storeRepository: StoreRepository,
+    ) { }
 
     async getSellers() {
         const sellers = await this.usersService.findAllWhere({ role: 'seller' });
@@ -48,5 +51,17 @@ export class AdminService {
         const user = await this.usersService.findById(id);
         if (!user) throw new NotFoundException('User not found');
         return this.usersService.changeIsApplied(id, false);
+    }
+
+    async getCategories() {
+        return this.productsService.getCategories();
+    }
+
+    async getStores() {
+        return this.storeRepository.findAll();
+    }
+
+    async getProducts() {
+        return this.productsService.getAllProducts();
     }
 }

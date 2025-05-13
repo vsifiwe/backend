@@ -42,5 +42,9 @@ export class ProductsService {
     async getAllProducts(): Promise<Product[]> {
         return this.productRepository.findAll();
     }
+
+    async getCategories(): Promise<Category[]> {
+        return this.categoryRepository.findAll();
+    }
     
 }

@@ -15,9 +15,9 @@ export class AdminController {
         return this.adminService.getUsers();
     }
 
-    @Get('sellers')
-    getSellers() {
-        return this.adminService.getSellers();
+    @Get('stores')
+    getStores() {
+        return this.adminService.getStores();
     }
 
     @Get('sellers/applications')
@@ -33,5 +33,15 @@ export class AdminController {
     @Patch('sellers/:id/reject')
     rejectSeller(@Param('id') id: number) {
         return this.adminService.rejectSeller(id);
+    }
+
+    @Get('categories')
+    getCategories() {
+        return this.adminService.getCategories();
+    }
+
+    @Get('products')
+    getProducts() {
+        return this.adminService.getProducts();
     }
 }
