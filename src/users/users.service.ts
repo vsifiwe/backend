@@ -20,6 +20,10 @@ export class UsersService {
     return this.usersRepository.findById(id);
   }
 
+  async findAll() {
+    return this.usersRepository.findAll();
+  }
+
   async findAllWhere(options: FindOptionsWhere<User>) {
     return this.usersRepository.findAllWhere(options);
   }

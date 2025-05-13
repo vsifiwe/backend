@@ -10,6 +10,11 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 export class AdminController {
     constructor(private adminService: AdminService) {}
 
+    @Get('users')
+    getUsers() {
+        return this.adminService.getUsers();
+    }
+
     @Get('sellers')
     getSellers() {
         return this.adminService.getSellers();
@@ -29,6 +34,4 @@ export class AdminController {
     rejectSeller(@Param('id') id: number) {
         return this.adminService.rejectSeller(id);
     }
-
-    // Products
 }

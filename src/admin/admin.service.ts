@@ -10,11 +10,32 @@ export class AdminService {
         private readonly jwtService: JwtService) { }
 
     async getSellers() {
-        return this.usersService.findAllWhere({ role: 'seller' });
+        const sellers = await this.usersService.findAllWhere({ role: 'seller' });
+        return sellers.map(seller => {
+            delete seller.password;
+            delete seller.createdAt;
+            delete seller.updatedAt;
+            return seller;
+        });
+    }
+
+    async getUsers() {
+        const users = await this.usersService.findAll();
+        return users.map(user => {
+            delete user.password;
+            delete user.createdAt;
+            delete user.updatedAt;
+            return user;
+        });
     }
 
     async getSellerApplications() {
-        return this.usersService.findAllWhere({ role: 'user', isApplied: true });
+        const users = await this.usersService.findAllWhere({ role: 'user', isApplied: true });
+        return users.map(user => {
+            delete user.password;
+            delete user.updatedAt;
+            return user;
+        });
     }
 
     async approveSeller(id: number) {

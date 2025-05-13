@@ -32,7 +32,8 @@ export class SellersService {
     async applyForSeller(userId: number) {
         const user = await this.usersService.findById(userId);
         if (!user) throw new NotFoundException('User not found');
-        await this.usersService.changeRole(userId, 'seller');
+        // await this.usersService.changeRole(userId, 'seller');
+        await this.usersService.changeIsApplied(userId, true);
         return { message: 'Seller application submitted' };
     }
     
