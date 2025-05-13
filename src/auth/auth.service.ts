@@ -13,7 +13,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private mailerService: MailerService,
-  ) {}
+  ) { }
 
   async register(dto: RegisterDto) {
     const exists = await this.usersService.findByEmail(dto.email);
@@ -47,11 +47,19 @@ export class AuthService {
     if (!(await bcrypt.compare(dto.password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const payload = { 
+    const payload = {
       sub: user.id,
       role: user.role,
     };
-    return { access_token: this.jwtService.sign(payload) };
+    return {
+      access_token: this.jwtService.sign(payload),
+      user: {
+        id: user.id,
+        name: user.name,
+        role: user.role,
+      },
+      message: 'Login successful',
+    };
   }
 
   async getProfile(id: number): Promise<User> {

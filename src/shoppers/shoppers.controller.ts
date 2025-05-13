@@ -13,7 +13,6 @@ export class ShoppersController {
 
     @Get()
     async getProducts(@Req() req): Promise<Product[]> {
-        console.log(req.user);
         return this.shoppersService.getProducts();
     }
 
@@ -28,7 +27,6 @@ export class ShoppersController {
     @Roles('user')
     @Get('orders')
     async getOrders(@Req() req): Promise<Order[]> {
-        console.log(req.user);
         return this.shoppersService.getOrdersByShopperId(req.user.id);
     }
 
