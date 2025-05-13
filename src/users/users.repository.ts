@@ -28,10 +28,6 @@ export class UsersRepository {
     return this.findById(id);
   }
 
-  async verifyEmail(id: number): Promise<User | null> {
-    return this.update(id, { isVerified: true });
-  }
-
   async delete(id: number): Promise<void> {
     await this.repository.delete({ id });
   }

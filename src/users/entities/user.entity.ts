@@ -14,7 +14,7 @@ export class User {
   email: string;
 
   @Column({ default: false })
-  isVerified: boolean;
+  isApplied: boolean;
 
   @CreateDateColumn()
   createdAt: Date;

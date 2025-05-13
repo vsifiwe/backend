@@ -25,7 +25,7 @@ export class AuthService {
     newUser.name = dto.name;
     newUser.email = dto.email;
     newUser.password = hash;
-    newUser.isVerified = false;
+    newUser.isApplied = false;
     newUser.role = role;
 
     const user = await this.usersService.create(newUser);
@@ -39,15 +39,6 @@ export class AuthService {
     //   context: { name: user.name, url },
     // });
     return { message: 'Registration successful' };
-  }
-
-  async verifyEmail(id: number) {
-    try {
-      await this.usersService.verifyEmail(id);
-      return { message: 'Email verified successfully' };
-    } catch {
-      throw new BadRequestException('Invalid or expired token');
-    }
   }
 
   async login(dto: LoginDto) {

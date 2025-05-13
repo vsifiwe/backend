@@ -15,6 +15,11 @@ export class AdminController {
         return this.adminService.getSellers();
     }
 
+    @Get('sellers/applications')
+    getSellerApplications() {
+        return this.adminService.getSellerApplications();
+    }
+
     @Patch('sellers/:id/approve')
     approveSeller(@Param('id') id: number) {
         return this.adminService.approveSeller(id);

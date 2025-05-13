@@ -23,11 +23,6 @@ export class AuthController {
     return this.authService.register(dto);
   }
 
-  @Get('verify')
-  verify(@Query('id') id: number) {
-    return this.authService.verifyEmail(id);
-  }
-
   @Post('login')
   login(@Body() dto: LoginDto) {
     return this.authService.login(dto);
@@ -38,8 +33,8 @@ export class AuthController {
   async profile(@Req() req) {
     const user = await this.authService.getProfile(req.user.sub);
 
-    // if user is seller, and is verified, and has a store, attach the store to the user
-    if (user.role === 'seller' && user.isVerified) {
+    // if user is seller, and has a store, attach the store to the user
+    if (user.role === 'seller') {
       const store = await this.sellersService.getStoreByUserId(user.id);
       return { ...user, store };
     }
@@ -54,10 +49,10 @@ export class AuthController {
 
     // email must be similar to the email in the request
     if (user.email !== dto.email) throw new BadRequestException('Email does not match');
-    if (user.role === 'seller') throw new BadRequestException('You have already applied for seller');
 
-    // check if user is already verified
-    if (user.isVerified) throw new BadRequestException('You have been verified');
+    // check if user is already applied
+    if (user.isApplied) throw new BadRequestException('You have already applied for seller');
+    if (user.role === 'seller') throw new BadRequestException('You have already been approved as a seller');
 
     return this.sellersService.applyForSeller(user.id);
   }

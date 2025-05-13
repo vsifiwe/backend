@@ -16,10 +16,6 @@ export class UsersService {
     return this.usersRepository.findByEmail(email);
   }
 
-  async verifyEmail(id: number) {
-    return this.usersRepository.verifyEmail(id);
-  }
-
   async findById(id: number) {
     return this.usersRepository.findById(id);
   }
@@ -32,6 +28,13 @@ export class UsersService {
     const user = await this.usersRepository.findById(id);
     if (!user) throw new NotFoundException('User not found');
     user.role = role;
+    return this.usersRepository.update(id, user);
+  }
+
+  async changeIsApplied(id: number, isApplied: boolean) {
+    const user = await this.usersRepository.findById(id);
+    if (!user) throw new NotFoundException('User not found');
+    user.isApplied = isApplied;
     return this.usersRepository.update(id, user);
   }
 }
