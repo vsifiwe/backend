@@ -19,24 +19,26 @@ export class AuthService {
     const exists = await this.usersService.findByEmail(dto.email);
     if (exists) throw new BadRequestException('Email already in use');
     const hash = await bcrypt.hash(dto.password, 10);
+    const role = 'user';
 
     const newUser = new User();
     newUser.name = dto.name;
     newUser.email = dto.email;
     newUser.password = hash;
     newUser.isVerified = false;
+    newUser.role = role;
 
     const user = await this.usersService.create(newUser);
-    const token = this.jwtService.sign({ sub: user.id }, { expiresIn: '1d' });
-    console.log(token);
-    const url = `${process.env.APP_URL}/auth/verify?token=${token}`;
-    await this.mailerService.sendMail({
-      to: user.email,
-      subject: 'Verify your email',
-      template: 'verify-email',
-      context: { name: user.name, url },
-    });
-    return { message: 'Registration successful, check email for verification' };
+    // const token = this.jwtService.sign({ sub: user.id }, { expiresIn: '1d' });
+    // console.log(token);
+    // const url = `${process.env.APP_URL}/auth/verify?token=${token}`;
+    // await this.mailerService.sendMail({
+    //   to: user.email,
+    //   subject: 'Verify your email',
+    //   template: 'verify-email',
+    //   context: { name: user.name, url },
+    // });
+    return { message: 'Registration successful' };
   }
 
   async verifyEmail(id: number) {
@@ -53,9 +55,6 @@ export class AuthService {
     if (!user) throw new UnauthorizedException('Invalid credentials');
     if (!(await bcrypt.compare(dto.password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
-    }
-    if (!user.isVerified) {
-      throw new UnauthorizedException('Email not verified');
     }
     const payload = { 
       sub: user.id,

@@ -13,8 +13,4 @@ export class RegisterDto {
   @MinLength(6)
   @ApiProperty({ description: 'The password of the user' })
   readonly password: string;
-
-  @IsNotEmpty()
-  @ApiProperty({ description: 'The role of the user' })
-  readonly role: string;
 }
