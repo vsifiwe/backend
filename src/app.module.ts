@@ -27,9 +27,9 @@ import { ShoppersModule } from './shoppers/shoppers.module';
       database: process.env.DB_DATABASE,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: process.env.NODE_ENV !== 'production',
-      // ssl: {
-      //   rejectUnauthorized: false
-      // }
+      ssl: {
+        rejectUnauthorized: false
+      }
     }),
     MailerModule.forRoot({
       transport: {
