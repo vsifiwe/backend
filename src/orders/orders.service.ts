@@ -40,8 +40,14 @@ export class OrdersService {
         order.items = orderItems;
         order.total = total;
         order.status = 'pending';
+        order.street = newOrder.street;
+        order.city = newOrder.city;
+        order.phone = newOrder.phone;
+        order.email = newOrder.email;
 
-        return this.ordersRepository.create(order);
+        const createdOrder = await this.ordersRepository.create(order);
+        await this.productsService.clearCart(userId);
+        return createdOrder;
     }
 
     async getOrdersByStoreId(storeId: number): Promise<Order[]> {

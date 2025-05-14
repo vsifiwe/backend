@@ -126,4 +126,13 @@ export class ProductsService {
     async removeProductFromWishlist(userId: number, productId: number): Promise<Wishlist[]> {
         return this.wishlistRepository.removeProductFromWishlist(userId, productId);
     }
+
+    async clearCart(userId: number): Promise<Cart> {
+        const cart = await this.cartRepository.findByUserId(userId);
+        if (!cart) {
+            throw new NotFoundException('Cart not found');
+        }
+        await this.cartItemRepository.deleteAll(cart.id);
+        return this.cartRepository.findById(cart.id);
+    }
 }

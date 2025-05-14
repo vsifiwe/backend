@@ -36,6 +36,7 @@ export class CartItemRepository {
   }
 
   async delete(cartId: number, productId: number): Promise<void> {
+    console.log('deleted');
     await this.repository.delete({ cart: { id: cartId }, product: { id: productId } });
   }
 
@@ -56,5 +57,9 @@ export class CartItemRepository {
   async updateQuantity(id: number, quantity: number): Promise<CartItem | null> {
     await this.repository.update({ id }, { quantity });
     return this.repository.findOne({ where: { id } });
+  }
+
+  async deleteAll(cartId: number): Promise<void> {
+    await this.repository.delete({ cart: { id: cartId } });
   }
 } 

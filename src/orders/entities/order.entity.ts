@@ -24,4 +24,16 @@ export class Order {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @Column()
+    street: string;
+
+    @Column()
+    city: string;
+
+    @Column()
+    phone: string;
+
+    @Column()
+    email: string;
 }

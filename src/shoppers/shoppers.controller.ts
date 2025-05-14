@@ -12,72 +12,77 @@ import { Wishlist } from 'src/products/entities/wishlist.entity';
 
 @Controller('shoppers')
 export class ShoppersController {
-    constructor(private readonly shoppersService: ShoppersService) {}
+    constructor(private readonly shoppersService: ShoppersService) { }
 
     @Get()
     async getProducts(@Req() req): Promise<Product[]> {
         return this.shoppersService.getProducts();
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard )
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('user')
     @Post('orders')
     async createOrder(@Req() req, @Body() newOrder: NewOrderDto): Promise<Order> {
+        console.log(newOrder);
         return this.shoppersService.createOrder(newOrder, req.user.id);
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard )
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('user')
     @Get('orders')
     async getOrders(@Req() req): Promise<Order[]> {
         return this.shoppersService.getOrdersByShopperId(req.user.id);
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard )
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('user')
     @Get('cart')
     async getCart(@Req() req): Promise<Cart & { total: number }> {
         const cart = await this.shoppersService.getCartByUserId(req.user.id);
         let total = 0;
+        let products = [];
         cart.items.forEach(item => {
             total += item.price * item.quantity;
         });
-        return { ...cart, total };
+
+        return { ...cart, total: total };
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard )
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('user')
     @Post('cart')
     async addProductToCart(@Req() req, @Body() dto: CartItemDto): Promise<Cart> {
         return this.shoppersService.addProductToCart(req.user.id, dto.productId, dto.quantity);
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard )
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('user')
-    @Delete('cart')
-    async removeProductFromCart(@Req() req, @Body() dto: {productId: number}): Promise<Cart> {
-        return this.shoppersService.removeProductFromCart(req.user.id, dto.productId);
+    @Delete('cart/:productId')
+    async removeProductFromCart(@Req() req, @Param('productId') productId: number): Promise<Cart> {
+        console.log(req.user.id, productId);
+        return this.shoppersService.removeProductFromCart(req.user.id, productId);
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard )
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('user')
     @Get('wishlist')
     async getWishlist(@Req() req): Promise<Wishlist[]> {
         return this.shoppersService.getWishlistByUserId(req.user.id);
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard )
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('user')
     @Post('wishlist')
-    async addProductToWishlist(@Req() req, @Body() dto: {productId: number}): Promise<Wishlist> {
+    async addProductToWishlist(@Req() req, @Body() dto: { productId: number }): Promise<Wishlist> {
         return this.shoppersService.addProductToWishlist(req.user.id, dto.productId);
     }
 
-    @UseGuards(JwtAuthGuard, RolesGuard )
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('user')
-    @Delete('wishlist')
-    async removeProductFromWishlist(@Req() req, @Body() dto: {productId: number}): Promise<Wishlist[]> {
-        return this.shoppersService.removeProductFromWishlist(req.user.id, dto.productId);
+    @Delete('wishlist/:productId')
+    async removeProductFromWishlist(@Req() req, @Param('productId') productId: number): Promise<Wishlist[]> {
+        console.log(req.user.id, productId);
+        return this.shoppersService.removeProductFromWishlist(req.user.id, productId);
     }
 
     @Get(':id')

@@ -23,6 +23,7 @@ export class ShoppersService {
     }
 
     async createOrder(newOrder: NewOrderDto, userId: number): Promise<Order> {
+        console.log(newOrder);
         return this.ordersService.createOrder(newOrder, userId);
     }
 

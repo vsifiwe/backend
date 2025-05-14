@@ -31,6 +31,7 @@ export class WishlistRepository {
     }   
     async removeProductFromWishlist(userId: number, productId: number): Promise<Wishlist[]> {
         await this.delete(userId, productId);
+        console.log('deleted');
         return this.findByUserId(userId);
     }
 }

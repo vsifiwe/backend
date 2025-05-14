@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cart } from '../entities/cart.entity';
+import { Product } from '../entities/product.entity';
 
 @Injectable()
 export class CartRepository {
@@ -25,5 +26,18 @@ export class CartRepository {
 
   async delete(id: number): Promise<void> {
     await this.repository.delete({ id });
+  }
+
+  async findCartProducts(userId: number): Promise<Product[]> {
+    const cart = await this.repository.findOne({ where: { user: { id: userId } } });
+    if (!cart) {
+      return null;
+    }
+    return cart.items.map(item => {
+      return {
+        ...item.product,
+        quantity: item.quantity,
+      };
+    });
   }
 }
