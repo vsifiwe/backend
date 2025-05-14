@@ -61,6 +61,8 @@ export class SellersController {
       ...dto,
       store: store,
       category: category,
+      cartItems: [],
+      wishlists: [],
     }
     return this.productsService.createProduct(product);
   }

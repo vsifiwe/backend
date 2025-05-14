@@ -1,6 +1,8 @@
 import { Order } from 'src/orders/entities/order.entity';
 import { Store } from 'src/sellers/entities/store.entity';
 import { Entity, Column, PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, OneToOne, OneToMany } from 'typeorm';
+import { Cart } from 'src/products/entities/cart.entity';
+import { Wishlist } from 'src/products/entities/wishlist.entity';
 
 @Entity('users')
 export class User {
@@ -30,4 +32,10 @@ export class User {
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
+
+  @OneToOne(() => Cart, (cart) => cart.user)
+  cart: Cart;
+
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.user)
+  wishlists: Wishlist[];
 }
