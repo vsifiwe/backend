@@ -36,6 +36,12 @@ export class SellersService {
         await this.usersService.changeIsApplied(userId, true);
         return { message: 'Seller application submitted' };
     }
+
+    async updateStore(userId: number, dto: any) {
+        const store = await this.storeRepository.findStoreByUserId(userId);
+        if (!store) throw new NotFoundException('Store not found');
+        return this.storeRepository.update(store.id, dto);
+    }
     
 }
 

@@ -1,6 +1,7 @@
 import {
   Controller, Get, Post, Patch, Delete, Body, Param, Req, UseGuards, NotFoundException,
-  BadRequestException
+  BadRequestException,
+  Put
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateStoreDto } from './dto/createStore.dto';
@@ -42,9 +43,9 @@ export class SellersController {
     return this.sellersService.getStore(req.user.id);
   }
 
-  @Patch('store')
+  @Put('store/:id')
   updateStore(@Req() req, @Body() dto: any) {
-    // return this.sellersService.updateStore(req.user.userId, dto);
+    return this.sellersService.updateStore(req.user.id, dto);
   }
 
   @Get('products')
