@@ -42,6 +42,10 @@ export class SellersService {
         if (!store) throw new NotFoundException('Store not found');
         return this.storeRepository.update(store.id, dto);
     }
+
+    async getStores() {
+        return this.storeRepository.findAll();
+    }
     
 }
 

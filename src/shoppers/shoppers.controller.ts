@@ -9,10 +9,15 @@ import { NewOrderDto } from 'src/orders/dto/newOrder.dto';
 import { Cart } from 'src/products/entities/cart.entity';
 import { CartItemDto } from './dto/cartItem.dto';
 import { Wishlist } from 'src/products/entities/wishlist.entity';
+import { SellersService } from 'src/sellers/sellers.service';
+import { Store } from 'src/sellers/entities/store.entity';
 
 @Controller('shoppers')
 export class ShoppersController {
-    constructor(private readonly shoppersService: ShoppersService) { }
+    constructor(
+        private readonly shoppersService: ShoppersService,
+        private readonly sellersService: SellersService
+    ) { }
 
     @Get()
     async getProducts(@Req() req): Promise<Product[]> {
@@ -83,6 +88,13 @@ export class ShoppersController {
     async removeProductFromWishlist(@Req() req, @Param('productId') productId: number): Promise<Wishlist[]> {
         console.log(req.user.id, productId);
         return this.shoppersService.removeProductFromWishlist(req.user.id, productId);
+    }
+
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('user')
+    @Get('stores')
+    async getStores(@Req() req): Promise<Store[]> {
+        return this.sellersService.getStores();
     }
 
     @Get(':id')

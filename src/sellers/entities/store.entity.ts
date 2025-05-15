@@ -26,13 +26,13 @@ export class Store {
     @Column({ default: 0})
     reviewCount: number;
 
-    @OneToMany(() => Product, (product) => product.store)
+    @OneToMany(() => Product, (product) => product.store, { eager: true })
     products: Product[];
 
     @OneToOne(() => User, { eager: true, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'userId' })
     user: User;
 
-    @OneToMany(() => Category, (category) => category.store)
+    @OneToMany(() => Category, (category) => category.store, { eager: true })
     categories: Category[];
 }
